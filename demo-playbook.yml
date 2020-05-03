@@ -1,0 +1,22 @@
+---
+
+# demo_setup.yml
+
+- hosts: localhost
+  gather_facts: False
+
+  tasks:
+
+    - name: Provision a set of instances
+      ec2:
+         key_name: lgbarn
+         region: us-east-1
+         instance_type: t2.micro
+         image: "ami-0323c3dd2da7fb37d"
+         wait: true
+         exact_count: 5
+         count_tag:
+            Name: Demo
+         instance_tags:
+            Name: Demo
+      register: ec2
