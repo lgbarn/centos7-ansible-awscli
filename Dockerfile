@@ -1,4 +1,4 @@
-FROM python:3.7.7
+FROM ubuntu:18.04
 
 MAINTAINER lgbarn
 
@@ -8,6 +8,8 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        apt-utils \
        locales \
+       python3-pip \
+       python3-setuptools \
        vim \
        software-properties-common \
        rsyslog systemd systemd-cron sudo iproute2 \
@@ -20,7 +22,7 @@ RUN sed -i 's/^\($ModLoad imklog\)/#\1/' /etc/rsyslog.conf
 RUN locale-gen en_US.UTF-8
 
 # Install Ansible via Pip.
-RUN pip3 install $pip_packages
+RUN pip3 install wheel && pip3 install ${pip_packages}
 
 COPY initctl_faker .
 RUN chmod +x initctl_faker && rm -fr /sbin/initctl && ln -s /initctl_faker /sbin/initctl
@@ -34,7 +36,7 @@ RUN echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
 RUN rm -f /lib/systemd/system/systemd*udev* \
   && rm -f /lib/systemd/system/getty.target
 
-RUN rm /usr/bin/python && ln -s /usr/local/bin/python /usr/bin/python
+RUN ln -s /usr/local/bin/python /usr/bin/python
 
 VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
 CMD ["/lib/systemd/systemd"]
