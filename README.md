@@ -1,6 +1,6 @@
-# Ubuntu 18.04 Ansible with AWS-CLI toolset Image 
+# CentOS 7 Ansible with AWS-CLI toolset Image 
 
-[![Build Status](https://travis-ci.org/lgbarn/ubuntu-ansible-awscli.svg?branch=master)](https://travis-ci.org/lgbarn/ubuntu-ansible-awscli) [![Docker Automated build](https://img.shields.io/docker/automated/lgbarn/ubuntu-ansible-awscli.svg?maxAge=2592000)](https://hub.docker.com/r/lgbarn/ubuntu-ansible-awscli/)
+[![Build Status](https://travis-ci.org/lgbarn/centos7-ansible-awscli.svg?branch=master)](https://travis-ci.org/lgbarn/centos7-ansible-awscli) [![Docker Automated build](https://img.shields.io/docker/automated/lgbarn/centos7-ansible-awscli.svg?maxAge=2592000)](https://hub.docker.com/r/lgbarn/centos7-ansible-awscli/)
 
 Ubuntu 18.04 Docker container for Ansible playbook and AWS Development.
 
@@ -16,13 +16,13 @@ This image is built on Docker Hub automatically any time the upstream OS contain
 
   1. [Install Docker](https://docs.docker.com/engine/installation/).
   2. `cd` into this directory.
-  3. Run `docker build -t ubuntu-ansible-awscli .`
+  3. Run `docker build -t centos7-ansible-awscli .`
 
 ## How to Use
 
   1. [Install Docker](https://docs.docker.com/engine/installation/).
-  2. Pull this image from Docker Hub: `docker pull lgbarn/ubuntu-ansible-awscli:latest` (or use the image you built earlier, e.g. `ubuntu-ansible-awscli:latest`).
-  3. Run a container from the image: `docker run --detach --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro lgbarn/ubuntu-ansible-awscli:latest` (to test my Ansible roles, I add in a volume mounted from the current working directory with ``--volume=`pwd`:/etc/ansible/roles/role_under_test:ro``).
+  2. Pull this image from Docker Hub: `docker pull lgbarn/centos7-ansible-awscli:latest` (or use the image you built earlier, e.g. `centos7-ansible-awscli:latest`).
+  3. Run a container from the image: `docker run --detach --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro lgbarn/centos7-ansible-awscli:latest` (to test my Ansible roles, I add in a volume mounted from the current working directory with ``--volume=`pwd`:/etc/ansible/roles/role_under_test:ro``).
   4. Use Ansible inside the container:
     a. `docker exec --tty [container_id] env TERM=xterm ansible --version`
     b. `docker exec --tty [container_id] env TERM=xterm ansible-playbook /path/to/ansible/playbook.yml --syntax-check`

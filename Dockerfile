@@ -1,42 +1,40 @@
-FROM ubuntu:18.04
+FROM centos:7
 
 MAINTAINER lgbarn
 
+ENV container=docker
+
 ENV pip_packages "ansible awscli boto3 boto"
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-       apt-utils \
-       locales \
-       python3-pip \
-       python3-setuptools \
-       vim \
-       software-properties-common \
-       rsyslog systemd systemd-cron sudo iproute2 \
-    && rm -Rf /var/lib/apt/lists/* \
-    && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
-    && apt-get clean
-RUN sed -i 's/^\($ModLoad imklog\)/#\1/' /etc/rsyslog.conf
+RUN yum -y update; yum clean all; \
+(cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+rm -f /lib/systemd/system/multi-user.target.wants/*;\
+rm -f /etc/systemd/system/*.wants/*;\
+rm -f /lib/systemd/system/local-fs.target.wants/*; \
+rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+rm -f /lib/systemd/system/basic.target.wants/*;\
+rm -f /lib/systemd/system/anaconda.target.wants/*;
 
-# Fix potential UTF-8 errors with ansible-test.
-RUN locale-gen en_US.UTF-8
+# Install requirements.
+RUN yum makecache fast \
+ && yum -y install deltarpm epel-release initscripts \
+ && yum -y update \
+ && yum -y install \
+      sudo \
+      which \
+      python3-pip \
+ && yum clean all
 
 # Install Ansible via Pip.
 RUN pip3 install wheel && pip3 install ${pip_packages}
 
-COPY initctl_faker .
-RUN chmod +x initctl_faker && rm -fr /sbin/initctl && ln -s /initctl_faker /sbin/initctl
+# Disable requiretty.
+RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
 
 # Install Ansible inventory file.
 RUN mkdir -p /etc/ansible
-RUN echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
+RUN echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
 
-# Remove unnecessary getty and udev targets that result in high CPU usage when using
-# multiple containers with Molecule (https://github.com/ansible/molecule/issues/1104)
-RUN rm -f /lib/systemd/system/systemd*udev* \
-  && rm -f /lib/systemd/system/getty.target
-
-RUN ln -s /usr/local/bin/python /usr/bin/python
-
-VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
-CMD ["/lib/systemd/systemd"]
+VOLUME ["/sys/fs/cgroup"]
+CMD ["/usr/lib/systemd/systemd"]
