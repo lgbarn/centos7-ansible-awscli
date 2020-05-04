@@ -1,6 +1,6 @@
 # Ubuntu 18.04 Ansible with AWS-CLI toolset Image 
 
-[![Build Status](https://travis-ci.com/lgbarn/ubuntu-ansible-awscli.svg?branch=master)](https://travis-ci.com/lgbarn/ubuntu-ansible-awscli) [![Docker Automated build](https://img.shields.io/docker/automated/lgbarn/ubuntu-ansible-awscli.svg?maxAge=2592000)](https://hub.docker.com/r/lgbarn/ubuntu-ansible-awscli/)
+[![Build Status](https://travis-ci.org/lgbarn/ubuntu-ansible-awscli.svg?branch=master)](https://travis-ci.org/lgbarn/ubuntu-ansible-awscli) [![Docker Automated build](https://img.shields.io/docker/automated/lgbarn/ubuntu-ansible-awscli.svg?maxAge=2592000)](https://hub.docker.com/r/lgbarn/ubuntu-ansible-awscli/)
 
 Ubuntu 18.04 Docker container for Ansible playbook and AWS Development.
 
